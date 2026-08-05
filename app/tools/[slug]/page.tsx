@@ -4,6 +4,27 @@ import { notFound } from "next/navigation";
 import { ToolCalculator } from "../../components/ToolCalculator";
 import { getTool, tools } from "../../lib/tools";
 
+const freightRecommendations: Record<string, { title: string; description: string; href: string; label: string }> = {
+  "sales-tax-calculator": {
+    title: "Put sales tax inside the full order economics.",
+    description: "Use ShipMathLab to combine selling price, product cost, shipping, packaging, marketplace fees, and advertising in one margin estimate.",
+    href: "https://shipmathlab.com/tools/ecommerce-margin-calculator?utm_source=taxmathkit&utm_medium=referral&utm_campaign=tool-network",
+    label: "Open the ecommerce margin calculator",
+  },
+  "reverse-sales-tax-calculator": {
+    title: "Recovered the pre-tax price? Check the margin next.",
+    description: "ShipMathLab turns that price into an ecommerce contribution-margin estimate with shipping, packaging, fees, and advertising included.",
+    href: "https://shipmathlab.com/tools/ecommerce-margin-calculator?utm_source=taxmathkit&utm_medium=referral&utm_campaign=tool-network",
+    label: "Continue with ShipMathLab",
+  },
+  "vat-calculator": {
+    title: "Model VAT alongside freight and landed cost.",
+    description: "ShipMathLab helps importers combine goods, freight, insurance, duty, import tax, clearance fees, and quantity in a transparent landed-cost estimate.",
+    href: "https://shipmathlab.com/tools/landed-cost-calculator?utm_source=taxmathkit&utm_medium=referral&utm_campaign=tool-network",
+    label: "Open the landed-cost calculator",
+  },
+};
+
 export function generateStaticParams() { return tools.map(({ slug }) => ({ slug })); }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -24,6 +45,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const tool = getTool(slug);
   if (!tool) notFound();
   const related = tool.related.map((relatedSlug) => getTool(relatedSlug)).filter(Boolean);
+  const freightRecommendation = freightRecommendations[tool.slug];
   const jsonLd = [{
     "@context": "https://schema.org", "@type": "WebApplication", name: tool.title,
     applicationCategory: "FinanceApplication", operatingSystem: "Any", isAccessibleForFree: true,
@@ -42,6 +64,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         <aside><strong>Before you calculate</strong><p>This is an educational planning estimate. Review the assumptions below and verify the result for filing or payment decisions.</p><Link href="#sources">View primary sources ↓</Link></aside>
       </section>
       <section className="shell calculator-section"><ToolCalculator slug={tool.slug} /></section>
+      {freightRecommendation ? <section className="shell network-inline"><div><span>Related shipping calculation · ShipMathLab</span><h2>{freightRecommendation.title}</h2><p>{freightRecommendation.description}</p></div><a href={freightRecommendation.href}>{freightRecommendation.label} <span aria-hidden="true">→</span></a></section> : null}
       <section className="shell article-grid">
         <article className="article-main">
           <span className="eyebrow">How it works</span><h2>{tool.formulaTitle}</h2>

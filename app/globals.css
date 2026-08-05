@@ -96,6 +96,16 @@ main { min-height: 70vh; }
 .category-title { margin: 0 0 13px; color: var(--navy); font-size: 13px; text-transform: uppercase; letter-spacing: .14em; }
 
 .method-preview { display: grid; grid-template-columns: .9fr 1.1fr; gap: 90px; align-items: start; }
+.network-band { padding: 58px 0; border-block: 1px solid var(--line); background: var(--amber-pale); }
+.network-band-inner { display: flex; align-items: center; justify-content: space-between; gap: 60px; }
+.network-band h2 { max-width: 740px; margin: 8px 0 10px; color: var(--navy); font-family: var(--font-serif), Georgia, serif; font-size: clamp(31px, 4vw, 46px); line-height: 1.05; letter-spacing: -.035em; }
+.network-band p { max-width: 760px; margin: 0; color: var(--muted); }
+.network-button { flex: 0 0 auto; color: white; background: var(--navy); }
+.network-inline { display: flex; align-items: center; justify-content: space-between; gap: 50px; margin-bottom: 66px; padding: 27px 30px; border: 1px solid var(--line); border-left: 4px solid var(--amber); border-radius: 10px; background: var(--cream); }
+.network-inline > div > span { color: var(--teal); text-transform: uppercase; letter-spacing: .09em; font-size: 10px; font-weight: 900; }
+.network-inline h2 { margin: 8px 0 6px; color: var(--navy); font-family: var(--font-serif), Georgia, serif; font-size: clamp(25px, 3vw, 34px); line-height: 1.08; }
+.network-inline p { max-width: 760px; margin: 0; color: var(--muted); font-size: 12px; }
+.network-inline > a { flex: 0 0 auto; color: var(--teal); font-size: 12px; font-weight: 850; }
 .method-copy p { margin: 22px 0; color: var(--muted); }
 .text-link { color: var(--teal); font-weight: 850; font-size: 14px; }
 .text-link:hover { text-decoration: underline; text-underline-offset: 4px; }
@@ -233,7 +243,7 @@ main { min-height: 70vh; }
   .section { padding-top: 62px; padding-bottom: 62px; }.section-heading { display: block; }.section-heading > p { margin-top: 13px; }
   .featured-grid, .tool-grid, .field-grid, .metrics-grid, .check-list, .principle-grid { grid-template-columns: 1fr; }
   .tool-card, .featured-card { min-height: 250px; }.method-preview { gap: 45px; }
-  .cta-band .shell, .footer-bottom { align-items: flex-start; flex-direction: column; }
+  .cta-band .shell, .footer-bottom, .network-band-inner, .network-inline { align-items: flex-start; flex-direction: column; }
   .tool-hero { padding-top: 42px; }.tool-hero h1 { font-size: 42px; }
   .calculator-section { width: 100%; }.calculator-frame { border-radius: 0; border-inline: 0; }.calculator-inputs, .calculator-results { padding: 24px 18px; }
   .metric-emphasis { grid-column: auto; }.article-grid { padding-top: 52px; }.article-main h2 { font-size: 30px; }

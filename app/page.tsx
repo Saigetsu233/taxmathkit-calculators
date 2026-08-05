@@ -69,6 +69,13 @@ export default function Home() {
         <ol className="method-steps"><li><span>01</span><div><strong>Start with the right tax base</strong><p>Gross income, taxable income and business profit are not interchangeable.</p></div></li><li><span>02</span><div><strong>Apply published thresholds</strong><p>Brackets, deductions and wage bases are versioned by tax year.</p></div></li><li><span>03</span><div><strong>Show the boundaries</strong><p>Credits, phaseouts and local rules are called out instead of hidden.</p></div></li></ol>
       </section>
 
+      <section className="network-band">
+        <div className="shell network-band-inner">
+          <div><span className="eyebrow">More tools from the same maker</span><h2>Working through shipping costs too?</h2><p>ShipMathLab provides transparent calculators for dimensional weight, freight, landed cost, pallet loads, and ecommerce margin.</p></div>
+          <a className="button network-button" href="https://shipmathlab.com/?utm_source=taxmathkit&utm_medium=referral&utm_campaign=tool-network">Explore ShipMathLab <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+
       <section className="cta-band"><div className="shell"><div><span className="eyebrow light">No account. No black box.</span><h2>Make the estimate, then inspect it.</h2></div><Link className="button cream" href="/tools/income-tax-calculator">Open the federal calculator</Link></div></section>
     </>
   );
