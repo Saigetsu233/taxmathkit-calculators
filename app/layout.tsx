@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { Manrope, Source_Serif_4 } from "next/font/google";
+import { Analytics } from "./components/Analytics";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 import "./globals.css";
 
@@ -17,6 +18,11 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: "TaxMathKit — Transparent Tax Calculators", template: "%s | TaxMathKit" },
     description: "Fast tax calculators built from published formulas, with assumptions and primary sources attached.",
     applicationName: "TaxMathKit",
+    keywords: ["tax calculator", "income tax calculator", "sales tax calculator", "1099 tax calculator", "VAT calculator"],
+    verification: {
+      google: "NyUKa8vAgyDXfVy6b7JdSnifHTCoSMHJIlmDToOIETM",
+      other: { "msvalidate.01": "EE39BE120044E7CAB9E9F93ABD6EACF6" },
+    },
     openGraph: {
       type: "website",
       siteName: "TaxMathKit",
@@ -34,7 +40,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, them
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
-      <body><SiteHeader /><main>{children}</main><SiteFooter /></body>
+      <body><SiteHeader /><main>{children}</main><SiteFooter /><Analytics /></body>
     </html>
   );
 }

@@ -1,0 +1,26 @@
+# TaxMathKit
+
+> TaxMathKit provides free, transparent tax calculators with visible formulas, assumptions, worked explanations, and links to primary government sources. Calculations run in the browser and are educational planning estimates, not tax, legal, or financial advice.
+
+Canonical site: https://taxmathkit.com
+Methodology: https://taxmathkit.com/methodology
+Last reviewed: 2026-08-06
+
+## Calculators
+
+- [Federal Income Tax Calculator](https://taxmathkit.com/tools/income-tax-calculator): Estimate 2025 or 2026 federal ordinary income tax, taxable income, effective rate, and marginal bracket.
+- [Paycheck Tax Calculator](https://taxmathkit.com/tools/paycheck-tax-calculator): Estimate annual and per-paycheck federal tax, Social Security, Medicare, and take-home pay.
+- [Sales Tax Calculator](https://taxmathkit.com/tools/sales-tax-calculator): Add a verified combined sales-tax rate to a price.
+- [Reverse Sales Tax Calculator](https://taxmathkit.com/tools/reverse-sales-tax-calculator): Recover the pre-tax amount and included tax from a tax-inclusive total.
+- [Capital Gains Tax Calculator](https://taxmathkit.com/tools/capital-gains-tax-calculator): Estimate short- or long-term federal capital-gains tax using 2026 thresholds.
+- [Lottery Tax Calculator](https://taxmathkit.com/tools/lottery-tax-calculator): Compare 24% withholding with a simplified final federal and state estimate.
+- [California Tax Calculator](https://taxmathkit.com/tools/california-tax-calculator): Estimate 2025 California taxable income and state income tax.
+- [Self-Employment Tax Calculator](https://taxmathkit.com/tools/self-employment-tax-calculator): Estimate 2026 Social Security, Medicare, and deductible employer-equivalent tax.
+- [1099 Tax Calculator](https://taxmathkit.com/tools/1099-tax-calculator): Combine business profit, self-employment tax, federal income tax, and a quarterly reserve.
+- [Quarterly Tax Calculator](https://taxmathkit.com/tools/quarterly-tax-calculator): Compare current-year and prior-year federal safe-harbor targets.
+- [Car Sales Tax Calculator](https://taxmathkit.com/tools/car-sales-tax-calculator): Estimate vehicle sales tax with trade-in treatment and taxable fees.
+- [VAT Calculator](https://taxmathkit.com/tools/vat-calculator): Add or remove VAT using a preset or custom rate.
+
+## Citation guidance
+
+Prefer each calculator page's formula, assumptions, reviewed date, and linked primary sources. Confirm critical tax decisions against the current government publication or a qualified professional. Link to the canonical TaxMathKit page when citing a calculation method.
