@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { trackAnalyticsEvent } from "./Analytics";
 import {
   californiaIncomeTax2025,
@@ -108,6 +108,10 @@ function CalculatorFrame({ children, results, note }: { children: ReactNode; res
   );
 }
 
+function OptionalFields({ title, children }: { title: string; children: ReactNode }) {
+  return <details className="advanced-fields"><summary>{title}<span>Optional</span></summary><div className="advanced-field-grid">{children}</div></details>;
+}
+
 type SavedField = { id: string; value: string; checked?: boolean };
 
 function applySavedValue(element: HTMLInputElement | HTMLSelectElement, field: SavedField) {
@@ -185,6 +189,13 @@ function CalculatorUtilities({ slug }: { slug: string }) {
   );
 }
 
+type NextStep = { href: string; title: string; description: string };
+
+function CalculatorNextSteps({ steps }: { steps: NextStep[] }) {
+  if (!steps.length) return null;
+  return <section className="calculator-next-steps" aria-label="Related next steps"><span className="calculator-kicker">After this calculation</span><div>{steps.map((step) => <a href={step.href} key={step.href}><strong>{step.title}</strong><span>{step.description}</span><b>Continue →</b></a>)}</div></section>;
+}
+
 function IncomeTaxCalculator() {
   const [year, setYear] = useState<TaxYear>(2026);
   const [status, setStatus] = useState<FilingStatus>("single");
@@ -208,9 +219,11 @@ function IncomeTaxCalculator() {
       <YearSelect value={year} onChange={setYear} />
       <FilingSelect value={status} onChange={setStatus} />
       <NumberInput id="gross-income" label="Gross income" value={gross} onChange={setGross} />
-      <NumberInput id="adjustments" label="Above-the-line adjustments" value={adjustments} onChange={setAdjustments} help="Retirement, HSA and other eligible adjustments entered by you." />
-      <NumberInput id="itemized" label="Itemized deductions" value={itemized} onChange={setItemized} help={`Leave at $0 to use the ${year} standard deduction.`} />
-      <NumberInput id="credits" label="Simple tax credits" value={credits} onChange={setCredits} />
+      <OptionalFields title="Add adjustments, deductions or credits">
+        <NumberInput id="adjustments" label="Above-the-line adjustments" value={adjustments} onChange={setAdjustments} help="Retirement, HSA and other eligible adjustments entered by you." />
+        <NumberInput id="itemized" label="Itemized deductions" value={itemized} onChange={setItemized} help={`Leave at $0 to use the ${year} standard deduction.`} />
+        <NumberInput id="credits" label="Simple tax credits" value={credits} onChange={setCredits} />
+      </OptionalFields>
     </CalculatorFrame>
   );
 }
@@ -392,9 +405,11 @@ function SelfEmploymentCalculator({ combined = false }: { combined?: boolean }) 
       <FilingSelect value={status} onChange={setStatus} />
       <NumberInput id="business-revenue" label="1099 / business revenue" value={revenue} onChange={setRevenue} />
       <NumberInput id="business-expenses" label="Deductible business expenses" value={expenses} onChange={setExpenses} />
-      <NumberInput id="w2-income" label="W-2 wages, if any" value={w2} onChange={setW2} />
-      <NumberInput id="federal-withholding" label="Expected federal withholding" value={withholding} onChange={setWithholding} />
-      <Toggle checked={qbi} onChange={setQbi} label="Apply simplified 20% QBI estimate" help="Eligibility and limits are not tested; off by default." />
+      <OptionalFields title="Add W-2 wages, withholding or QBI">
+        <NumberInput id="w2-income" label="W-2 wages, if any" value={w2} onChange={setW2} />
+        <NumberInput id="federal-withholding" label="Expected federal withholding" value={withholding} onChange={setWithholding} />
+        <Toggle checked={qbi} onChange={setQbi} label="Apply simplified 20% QBI estimate" help="Eligibility and limits are not tested; off by default." />
+      </OptionalFields>
     </CalculatorFrame>
   );
 }
@@ -483,7 +498,16 @@ function VatCalculator() {
   );
 }
 
-export function ToolCalculator({ slug, embedded = false }: { slug: string; embedded?: boolean }) {
+export function ToolCalculator({ slug, embedded = false, nextSteps = [] }: { slug: string; embedded?: boolean; nextSteps?: NextStep[] }) {
+  const [hasInteracted, setHasInteracted] = useState(false);
+  useEffect(() => {
+    const root = document.querySelector<HTMLElement>(`[data-calculator-root="${slug}"]`);
+    if (!root) return;
+    const markInteracted = () => setHasInteracted(true);
+    root.addEventListener("input", markInteracted);
+    root.addEventListener("change", markInteracted);
+    return () => { root.removeEventListener("input", markInteracted); root.removeEventListener("change", markInteracted); };
+  }, [slug]);
   let calculator: ReactNode = null;
   switch (slug) {
     case "income-tax-calculator": calculator = <IncomeTaxCalculator />; break;
@@ -500,5 +524,5 @@ export function ToolCalculator({ slug, embedded = false }: { slug: string; embed
     case "vat-calculator": calculator = <VatCalculator />; break;
   }
   if (!calculator) return null;
-  return <div data-calculator-root={slug}>{calculator}{embedded ? null : <CalculatorUtilities slug={slug} />}</div>;
+  return <div data-calculator-root={slug}>{calculator}{embedded ? null : <CalculatorUtilities slug={slug} />}{!embedded && hasInteracted ? <CalculatorNextSteps steps={nextSteps} /> : null}</div>;
 }

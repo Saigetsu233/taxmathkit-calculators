@@ -60,6 +60,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           <h1>{guide.title}</h1>
           <p>{guide.description}</p>
           <div className="guide-takeaway"><strong>Bottom line</strong><p>{guide.takeaway}</p></div>
+          {relatedTools[0] ? <Link className="button primary guide-hero-action" href={`/tools/${guide.relatedTools[0]}`}>Open the calculator with a prefilled example ↓</Link> : null}
         </header>
         <div className="article-grid guide-layout">
           <div className="article-main guide-body">

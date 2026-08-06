@@ -19,5 +19,5 @@ export default async function EmbeddedTaxCalculator({ params }: { params: Promis
   if (!embeddableSlugs.includes(slug)) notFound();
   const tool = getTool(slug);
   if (!tool) notFound();
-  return <div className="embed-page"><header className="embed-header"><div><span className="brand-mark" aria-hidden="true">T</span><strong>{tool.title}</strong></div><Link href={`/tools/${slug}`} target="_blank">Open full method ↗</Link></header><div className="embed-calculator"><ToolCalculator slug={slug} embedded /></div><footer className="embed-footer"><Link href="/" target="_blank">Powered by TaxMathKit · transparent tax formulas</Link></footer></div>;
+  return <div className="embed-page"><header className="embed-header"><div><span className="brand-mark" aria-hidden="true">T</span><strong>{tool.title}</strong></div><Link href={`/tools/${slug}`} target="_blank">Open full method ↗</Link></header><div className="embed-calculator"><ToolCalculator slug={slug} embedded /></div><footer className="embed-footer"><Link href={`/tools/${slug}`} target="_blank">Open the full {tool.title} guide ↗</Link><Link href="/" target="_blank">Powered by TaxMathKit · transparent tax formulas</Link></footer></div>;
 }
