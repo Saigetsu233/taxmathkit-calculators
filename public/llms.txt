@@ -6,6 +6,8 @@ Canonical site: https://taxmathkit.com
 Methodology: https://taxmathkit.com/methodology
 Version log: https://taxmathkit.com/changelog
 Downloadable source tables: https://taxmathkit.com/resources
+Publisher and citation kit: https://taxmathkit.com/resources/for-publishers
+Embed directory: https://taxmathkit.com/embed
 Formula source: https://github.com/Saigetsu233/taxmathkit-calculators/tree/main/formula-library
 Last reviewed: 2026-08-06
 
@@ -34,3 +36,7 @@ Prefer each calculator page's formula, assumptions, reviewed date, and linked pr
 - https://taxmathkit.com/embed/1099-tax-calculator
 - https://taxmathkit.com/embed/self-employment-tax-calculator
 - https://taxmathkit.com/embed/sales-tax-calculator
+
+## Publisher kit
+
+- [Publisher and citation kit](https://taxmathkit.com/resources/for-publishers): Suggested attribution, canonical links, and downloadable source tables for articles and knowledge bases.
