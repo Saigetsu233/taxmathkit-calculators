@@ -114,6 +114,25 @@ function OptionalFields({ title, children }: { title: string; children: ReactNod
 
 type SavedField = { id: string; value: string; checked?: boolean };
 
+function encodeShareState(fields: SavedField[]) {
+  const bytes = new TextEncoder().encode(JSON.stringify(fields));
+  let binary = "";
+  bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function decodeShareState(value: string): SavedField[] {
+  try {
+    const padded = value.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - value.length % 4) % 4);
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    const decoded = JSON.parse(new TextDecoder().decode(bytes));
+    return Array.isArray(decoded) ? decoded.filter((field): field is SavedField => typeof field?.id === "string" && typeof field?.value === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
 function applySavedValue(element: HTMLInputElement | HTMLSelectElement, field: SavedField) {
   if (element instanceof HTMLInputElement && element.type === "checkbox") {
     const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "checked")?.set;
@@ -178,9 +197,45 @@ function CalculatorUtilities({ slug }: { slug: string }) {
     }
   }
 
+  function currentFields() {
+    return Array.from(root()?.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input[id], select[id]") ?? []).map((element) => ({
+      id: element.id,
+      value: element.value,
+      ...(element instanceof HTMLInputElement && element.type === "checkbox" ? { checked: element.checked } : {}),
+    }));
+  }
+
+  async function copyDecisionCard() {
+    const metrics = Array.from(root()?.querySelectorAll<HTMLElement>(".metric") ?? []);
+    const title = document.querySelector("h1")?.textContent?.trim() ?? "TaxMathKit calculation";
+    const summary = [title, ...metrics.map((metric) => `${metric.querySelector("span")?.textContent?.trim() ?? "Result"}: ${metric.querySelector("strong")?.textContent?.trim() ?? ""}`), `Source: ${window.location.origin}${window.location.pathname}`].join("\n");
+    try {
+      await navigator.clipboard.writeText(summary);
+      trackAnalyticsEvent("decision_card_copy", slug);
+      setStatus("Decision card copied");
+    } catch {
+      setStatus("Copy was blocked by the browser");
+    }
+  }
+
+  async function shareLink() {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.searchParams.set("share", encodeShareState(currentFields()));
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      trackAnalyticsEvent("share_link_copy", slug);
+      setStatus("Share link copied");
+    } catch {
+      setStatus("Copy was blocked by the browser");
+    }
+  }
+
   return (
     <div className="calculator-utilities" aria-label="Calculator result actions">
       <button type="button" onClick={copyResult}>Copy result</button>
+      <button type="button" onClick={copyDecisionCard}>Copy decision card</button>
+      <button type="button" onClick={shareLink}>Share this estimate</button>
       <button type="button" onClick={() => window.print()}>Print result</button>
       <button type="button" onClick={saveInputs}>Save inputs locally</button>
       <button type="button" onClick={restoreInputs}>Restore saved inputs</button>
@@ -508,6 +563,25 @@ export function ToolCalculator({ slug, embedded = false, nextSteps = [] }: { slu
   useEffect(() => {
     const root = document.querySelector<HTMLElement>(`[data-calculator-root="${slug}"]`);
     if (!root) return;
+    const shared = new URLSearchParams(window.location.search).get("share");
+    if (shared) {
+      window.requestAnimationFrame(() => {
+        for (const field of decodeShareState(shared)) {
+          const element = root.querySelector<HTMLInputElement | HTMLSelectElement>(`#${CSS.escape(field.id)}`);
+          if (!element) continue;
+          if (element instanceof HTMLInputElement && element.type === "checkbox") {
+            const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "checked")?.set;
+            setter?.call(element, field.checked === true);
+            element.dispatchEvent(new Event("change", { bubbles: true }));
+            continue;
+          }
+          const prototype = element instanceof HTMLSelectElement ? HTMLSelectElement.prototype : HTMLInputElement.prototype;
+          const setter = Object.getOwnPropertyDescriptor(prototype, "value")?.set;
+          setter?.call(element, field.value);
+          element.dispatchEvent(new Event(element instanceof HTMLSelectElement ? "change" : "input", { bubbles: true }));
+        }
+      });
+    }
     const markInteracted = () => setHasInteracted(true);
     root.addEventListener("input", markInteracted);
     root.addEventListener("change", markInteracted);

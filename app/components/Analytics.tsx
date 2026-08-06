@@ -27,7 +27,7 @@ function send(payload: Record<string, unknown>) {
   });
 }
 
-export function trackAnalyticsEvent(eventType: "tool_open" | "calculation_completed" | "copy_result" | "guide_to_tool" | "embed_view", eventLabel = "", sourceHost = "") {
+export function trackAnalyticsEvent(eventType: "tool_open" | "calculation_completed" | "copy_result" | "guide_to_tool" | "embed_view" | "decision_card_copy" | "share_link_copy", eventLabel = "", sourceHost = "") {
   if (typeof window === "undefined" || navigator.doNotTrack === "1") return;
   send({
     path: window.location.pathname,
