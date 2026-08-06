@@ -4,7 +4,7 @@ import { tools } from "./lib/tools";
 import { questions } from "./lib/questions";
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://taxmathkit.com";
-  const staticPaths = ["", "/guides", "/questions", "/resources", "/resources/for-publishers", "/embed", "/about", "/methodology", "/changelog", "/privacy", "/terms", "/disclaimer"];
+  const staticPaths = ["", "/guides", "/questions", "/freelancer-tax-planner", "/resources", "/resources/for-publishers", "/embed", "/about", "/methodology", "/changelog", "/privacy", "/terms", "/disclaimer"];
   const lastModified = new Date("2026-08-07");
   return [
     ...staticPaths.map((path) => ({ url: `${base}${path}`, lastModified, changeFrequency: path ? "monthly" as const : "weekly" as const, priority: path ? 0.6 : 1 })),

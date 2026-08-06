@@ -366,6 +366,7 @@ function SelfEmploymentCalculator({ combined = false }: { combined?: boolean }) 
   const [expenses, setExpenses] = useState(18_000);
   const [w2, setW2] = useState(0);
   const [withholding, setWithholding] = useState(0);
+  const [typicalPayment, setTypicalPayment] = useState(1_500);
   const [qbi, setQbi] = useState(false);
   const result = useMemo(() => {
     const profit = Math.max(0, combined ? revenue - expenses : revenue);
@@ -375,8 +376,9 @@ function SelfEmploymentCalculator({ combined = false }: { combined?: boolean }) 
     const federal = federalIncomeTax(taxableIncome, 2026, status);
     const total = federal + se.total;
     const remaining = Math.max(0, total - withholding);
-    return { profit, se, qbiDeduction, taxableIncome, federal, total, remaining, quarterly: remaining / 4 };
-  }, [revenue, expenses, w2, status, withholding, combined, qbi]);
+    const reserveRate = revenue > 0 ? remaining / revenue : 0;
+    return { profit, se, qbiDeduction, taxableIncome, federal, total, remaining, quarterly: remaining / 4, reserveRate, paymentReserve: typicalPayment * reserveRate };
+  }, [revenue, expenses, w2, status, withholding, combined, qbi, typicalPayment]);
   if (!combined) {
     return (
       <CalculatorFrame note="This isolates 2026 self-employment tax. Use the 1099 calculator for a combined federal income-tax estimate." results={<>
@@ -401,13 +403,16 @@ function SelfEmploymentCalculator({ combined = false }: { combined?: boolean }) 
       <Metric label="Federal income tax" value={money(result.federal)} />
       <Metric label="Remaining after withholding" value={money(result.remaining)} />
       <Metric label="Simple quarterly reserve" value={money(result.quarterly)} />
+      <Metric label="Suggested reserve from typical payment" value={money(result.paymentReserve, 2)} emphasis />
+      <Metric label="Reserve rate on 1099 receipts" value={percent(result.reserveRate)} />
     </>}>
       <FilingSelect value={status} onChange={setStatus} />
       <NumberInput id="business-revenue" label="1099 / business revenue" value={revenue} onChange={setRevenue} />
       <NumberInput id="business-expenses" label="Deductible business expenses" value={expenses} onChange={setExpenses} />
-      <OptionalFields title="Add W-2 wages, withholding or QBI">
+      <OptionalFields title="Add W-2 wages, withholding, payment size or QBI">
         <NumberInput id="w2-income" label="W-2 wages, if any" value={w2} onChange={setW2} />
         <NumberInput id="federal-withholding" label="Expected federal withholding" value={withholding} onChange={setWithholding} />
+        <NumberInput id="typical-1099-payment" label="Typical 1099 payment" value={typicalPayment} onChange={setTypicalPayment} help="A gross payment amount used to turn the reserve rate into an actionable transfer." />
         <Toggle checked={qbi} onChange={setQbi} label="Apply simplified 20% QBI estimate" help="Eligibility and limits are not tested; off by default." />
       </OptionalFields>
     </CalculatorFrame>

@@ -6,6 +6,7 @@ Canonical site: https://taxmathkit.com
 About / What is TaxMathKit: https://taxmathkit.com/about
 Maintainer: Saigetsu233
 Question-based answers: https://taxmathkit.com/questions
+Freelancer cash-flow planner: https://taxmathkit.com/freelancer-tax-planner
 Methodology: https://taxmathkit.com/methodology
 Version log: https://taxmathkit.com/changelog
 Downloadable source tables: https://taxmathkit.com/resources
@@ -26,6 +27,10 @@ Last reviewed: 2026-08-06
 - [How do I calculate 1099 taxes if I also have a W-2 job?](https://taxmathkit.com/questions/1099-taxes-with-a-w2-job)
 - [How much will my paycheck be after taxes?](https://taxmathkit.com/questions/take-home-pay-after-taxes)
 - [How do I calculate sales tax by state?](https://taxmathkit.com/questions/sales-tax-calculator-by-state)
+
+## Freelancer cash-flow workflow
+
+- [Freelancer Tax Planner](https://taxmathkit.com/freelancer-tax-planner): Start with a prefilled 1099 example, estimate annual and quarterly federal tax, and translate the remaining amount into a suggested reserve from each payment.
 
 ## Calculators
 

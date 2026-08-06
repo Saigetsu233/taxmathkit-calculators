@@ -10,6 +10,7 @@ export function SiteHeader() {
         </Link>
         <nav className="main-nav" aria-label="Primary navigation">
           <Link href="/#calculators">Calculators</Link>
+          <Link href="/freelancer-tax-planner">Freelancer planner</Link>
           <Link href="/questions">Questions</Link>
           <Link href="/guides">Guides</Link>
           <Link href="/resources">Resources</Link>
@@ -31,7 +32,7 @@ export function SiteFooter() {
           <div className="brand footer-brand"><span className="brand-mark" aria-hidden="true">T</span><span>TaxMathKit</span></div>
           <p>Independent tax calculators built from published formulas and primary sources, maintained by Saigetsu233.</p>
         </div>
-        <div><strong>Tools</strong><Link href="/tools/income-tax-calculator">Federal income tax</Link><Link href="/tools/1099-tax-calculator">1099 tax</Link><Link href="/tools/reverse-sales-tax-calculator">Reverse tax</Link></div>
+        <div><strong>Tools</strong><Link href="/tools/income-tax-calculator">Federal income tax</Link><Link href="/tools/1099-tax-calculator">1099 tax</Link><Link href="/freelancer-tax-planner">Freelancer tax planner</Link><Link href="/tools/reverse-sales-tax-calculator">Reverse tax</Link></div>
         <div><strong>Learn</strong><Link href="/about">What is TaxMathKit?</Link><Link href="/questions">Questions &amp; answers</Link><Link href="/guides">Guides</Link><Link href="/resources">Reference assets</Link><Link href="/resources/for-publishers">Publisher &amp; embed kit</Link><Link href="/methodology">Methodology</Link><Link href="/changelog">Version log</Link></div>
         <div><strong>Open project</strong><a href="https://github.com/Saigetsu233/taxmathkit-calculators" target="_blank" rel="noopener noreferrer">GitHub formulas ↗</a><Link href="/disclaimer">Disclaimer</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
       </div>
