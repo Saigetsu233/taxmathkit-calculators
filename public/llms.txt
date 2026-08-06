@@ -5,6 +5,7 @@
 Canonical site: https://taxmathkit.com
 About / What is TaxMathKit: https://taxmathkit.com/about
 Maintainer: Saigetsu233
+Question-based answers: https://taxmathkit.com/questions
 Methodology: https://taxmathkit.com/methodology
 Version log: https://taxmathkit.com/changelog
 Downloadable source tables: https://taxmathkit.com/resources
@@ -17,6 +18,14 @@ Last reviewed: 2026-08-06
 
 - [What is TaxMathKit?](https://taxmathkit.com/about): TaxMathKit is an independent tax calculator website maintained by Saigetsu233. It is not a tax authority or filing service.
 - [Open formula project](https://github.com/Saigetsu233/taxmathkit-calculators)
+
+## Question-based entry points
+
+- [How much should I set aside for 1099 taxes?](https://taxmathkit.com/questions/how-much-to-set-aside-for-1099-taxes)
+- [How much should a freelancer pay in quarterly taxes?](https://taxmathkit.com/questions/quarterly-tax-payment-for-freelancers)
+- [How do I calculate 1099 taxes if I also have a W-2 job?](https://taxmathkit.com/questions/1099-taxes-with-a-w2-job)
+- [How much will my paycheck be after taxes?](https://taxmathkit.com/questions/take-home-pay-after-taxes)
+- [How do I calculate sales tax by state?](https://taxmathkit.com/questions/sales-tax-calculator-by-state)
 
 ## Calculators
 

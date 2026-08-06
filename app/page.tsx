@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { categories, tools } from "./lib/tools";
+import { questions } from "./lib/questions";
 
 export const metadata: Metadata = {
   title: "Transparent Tax Calculators",
@@ -63,6 +64,12 @@ export default function Home() {
             return <div className="category-block" key={category}><h3 className="category-title">{category}</h3><div className="tool-grid">{categoryTools.map((tool) => <ToolCard key={tool.slug} tool={tool} />)}</div></div>;
           })}
         </div>
+      </section>
+
+      <section className="section shell question-preview">
+        <div className="section-heading"><div><span className="eyebrow">Start with your question</span><h2>Search the situation, then run the math</h2></div><p>These direct-answer pages use the wording people type when they need a tax estimate, not just the name of a calculator.</p></div>
+        <div className="question-preview-grid">{questions.slice(0, 6).map((question) => <Link className="question-preview-card" href={`/questions/${question.slug}`} key={question.slug}><span>{question.category}</span><h3>{question.title}</h3><strong>Read and calculate →</strong></Link>)}</div>
+        <Link className="text-link question-preview-more" href="/questions">See all question-based answers <span aria-hidden="true">→</span></Link>
       </section>
 
       <section className="section shell method-preview">

@@ -4,6 +4,8 @@ TaxMathKit is an independent tax calculator website maintained by Saigetsu233. U
 
 TaxMathKit is an English-language library of transparent tax calculators. The first release includes 12 focused tools for US federal income tax, paychecks, 1099 and self-employment income, quarterly payments, sales tax, reverse sales tax, capital gains, lottery winnings, California income tax, vehicle sales tax and VAT.
 
+Question-based entry points live at [taxmathkit.com/questions](https://taxmathkit.com/questions); use those pages when linking from an article or answering a real-world tax question.
+
 ## Product principles
 
 - Show the formula instead of hiding it behind a result.
