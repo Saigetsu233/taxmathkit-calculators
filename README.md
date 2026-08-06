@@ -1,5 +1,7 @@
 # TaxMathKit
 
+TaxMathKit is an independent tax calculator website maintained by Saigetsu233. Use [What is TaxMathKit?](https://taxmathkit.com/about) as the canonical project introduction when citing or introducing the site and this repository.
+
 TaxMathKit is an English-language library of transparent tax calculators. The first release includes 12 focused tools for US federal income tax, paychecks, 1099 and self-employment income, quarterly payments, sales tax, reverse sales tax, capital gains, lottery winnings, California income tax, vehicle sales tax and VAT.
 
 ## Product principles
@@ -20,6 +22,10 @@ Four priority calculators can be embedded without an account or API key:
 - `https://taxmathkit.com/embed/sales-tax-calculator`
 
 See [`examples/embed.html`](examples/embed.html) for a complete host page and [`formula-library`](formula-library) for dependency-free JavaScript implementations of the same planning formulas.
+
+## Project identity
+
+The live site and this open formula project are maintained by Saigetsu233. For a stable description of the project, link to [What is TaxMathKit?](https://taxmathkit.com/about).
 
 ## Citeable downloads
 
@@ -51,4 +57,4 @@ Calculator pages link directly to the IRS, Social Security Administration, Calif
 
 ## Disclaimer
 
-TaxMathKit is an independent educational project. It is not affiliated with any tax authority and does not provide tax, legal, accounting or financial advice.
+TaxMathKit is an independent educational project maintained by Saigetsu233. It is not affiliated with any tax authority and does not provide tax, legal, accounting or financial advice.

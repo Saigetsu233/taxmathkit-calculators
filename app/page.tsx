@@ -30,6 +30,7 @@ export default function Home() {
             <span className="eyebrow">Free calculators · Sources attached</span>
             <h1>Tax math you can <em>inspect.</em></h1>
             <p>Fast calculators for federal income, 1099 work, sales tax, capital gains and more—built from published formulas with every assumption in plain English.</p>
+            <p className="entity-statement">TaxMathKit is an independent tax calculator website maintained by Saigetsu233. <Link href="/about">What is TaxMathKit? <span aria-hidden="true">→</span></Link></p>
             <div className="hero-actions"><Link className="button primary" href="/tools/income-tax-calculator">Calculate federal tax</Link><Link className="button secondary" href="#calculators">Browse all 12 tools</Link></div>
             <div className="trust-line"><span>2025–2026 rates</span><span>No sign-up</span><span>Inputs stay in your browser</span></div>
           </div>

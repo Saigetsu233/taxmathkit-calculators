@@ -37,10 +37,36 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#102a43" };
 
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "TaxMathKit",
+    url: "https://taxmathkit.com",
+    description: "Independent website of transparent tax calculators built from published formulas and primary sources.",
+    founder: { "@type": "Person", name: "Saigetsu233" },
+    sameAs: ["https://github.com/Saigetsu233/taxmathkit-calculators"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "TaxMathKit",
+    url: "https://taxmathkit.com",
+    description: "Transparent tax calculators with visible formulas, assumptions, and source links.",
+    publisher: { "@type": "Organization", name: "TaxMathKit", url: "https://taxmathkit.com" },
+  },
+];
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
-      <body><SiteHeader /><main>{children}</main><SiteFooter /><Analytics /></body>
+      <body>
+        <SiteHeader />
+        <main>{children}</main>
+        <SiteFooter />
+        <Analytics />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      </body>
     </html>
   );
 }

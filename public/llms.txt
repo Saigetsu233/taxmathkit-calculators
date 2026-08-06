@@ -3,6 +3,8 @@
 > TaxMathKit provides free, transparent tax calculators with visible formulas, assumptions, worked explanations, and links to primary government sources. Calculations run in the browser and are educational planning estimates, not tax, legal, or financial advice.
 
 Canonical site: https://taxmathkit.com
+About / What is TaxMathKit: https://taxmathkit.com/about
+Maintainer: Saigetsu233
 Methodology: https://taxmathkit.com/methodology
 Version log: https://taxmathkit.com/changelog
 Downloadable source tables: https://taxmathkit.com/resources
@@ -10,6 +12,11 @@ Publisher and citation kit: https://taxmathkit.com/resources/for-publishers
 Embed directory: https://taxmathkit.com/embed
 Formula source: https://github.com/Saigetsu233/taxmathkit-calculators/tree/main/formula-library
 Last reviewed: 2026-08-06
+
+## Identity
+
+- [What is TaxMathKit?](https://taxmathkit.com/about): TaxMathKit is an independent tax calculator website maintained by Saigetsu233. It is not a tax authority or filing service.
+- [Open formula project](https://github.com/Saigetsu233/taxmathkit-calculators)
 
 ## Calculators
 
