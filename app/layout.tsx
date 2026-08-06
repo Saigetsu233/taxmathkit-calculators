@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: "TaxMathKit",
     keywords: ["tax calculator", "income tax calculator", "sales tax calculator", "1099 tax calculator", "VAT calculator"],
     verification: {
-      google: "NyUKa8vAgyDXfVy6b7JdSnifHTCoSMHJIlmDToOIETM",
+      google: "0DJmyF8RTb74GdcyntoSq-noBMFaqWWEpRlDixtOwQw",
       other: { "msvalidate.01": "EE39BE120044E7CAB9E9F93ABD6EACF6" },
     },
     openGraph: {
