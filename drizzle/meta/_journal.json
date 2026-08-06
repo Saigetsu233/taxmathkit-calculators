@@ -8,6 +8,13 @@
       "when": 1785947598342,
       "tag": "0000_superb_mother_askani",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1785982096244,
+      "tag": "0001_faulty_firelord",
+      "breakpoints": true
     }
   ]
 }

@@ -10,6 +10,21 @@ TaxMathKit is an English-language library of transparent tax calculators. The fi
 - Keep calculator inputs in the browser and require no account.
 - Treat results as educational planning estimates, never filing advice.
 
+## Embeds and formula library
+
+Four priority calculators can be embedded without an account or API key:
+
+- `https://taxmathkit.com/embed/income-tax-calculator`
+- `https://taxmathkit.com/embed/1099-tax-calculator`
+- `https://taxmathkit.com/embed/self-employment-tax-calculator`
+- `https://taxmathkit.com/embed/sales-tax-calculator`
+
+See [`examples/embed.html`](examples/embed.html) for a complete host page and [`formula-library`](formula-library) for dependency-free JavaScript implementations of the same planning formulas.
+
+## Citeable downloads
+
+The live [reference asset page](https://taxmathkit.com/resources) provides CSV versions of the 2025/2026 federal brackets, the 92.35% self-employment-tax flow, a 1099 quarterly-payment checklist, and official state tax-agency entrances. Each file includes a review date and source URL.
+
 ## Run locally
 
 Node.js 22.13 or newer is required.

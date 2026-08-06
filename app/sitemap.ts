@@ -3,7 +3,7 @@ import { guides } from "./lib/guides";
 import { tools } from "./lib/tools";
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://taxmathkit.com";
-  const staticPaths = ["", "/guides", "/methodology", "/privacy", "/terms", "/disclaimer"];
+  const staticPaths = ["", "/guides", "/resources", "/methodology", "/changelog", "/privacy", "/terms", "/disclaimer"];
   const lastModified = new Date("2026-08-06");
   return [
     ...staticPaths.map((path) => ({ url: `${base}${path}`, lastModified, changeFrequency: path ? "monthly" as const : "weekly" as const, priority: path ? 0.6 : 1 })),

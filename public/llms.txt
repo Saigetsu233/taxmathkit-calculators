@@ -4,6 +4,9 @@
 
 Canonical site: https://taxmathkit.com
 Methodology: https://taxmathkit.com/methodology
+Version log: https://taxmathkit.com/changelog
+Downloadable source tables: https://taxmathkit.com/resources
+Formula source: https://github.com/Saigetsu233/taxmathkit-calculators/tree/main/formula-library
 Last reviewed: 2026-08-06
 
 ## Calculators
@@ -24,3 +27,10 @@ Last reviewed: 2026-08-06
 ## Citation guidance
 
 Prefer each calculator page's formula, assumptions, reviewed date, and linked primary sources. Confirm critical tax decisions against the current government publication or a qualified professional. Link to the canonical TaxMathKit page when citing a calculation method.
+
+## Embeddable calculators
+
+- https://taxmathkit.com/embed/income-tax-calculator
+- https://taxmathkit.com/embed/1099-tax-calculator
+- https://taxmathkit.com/embed/self-employment-tax-calculator
+- https://taxmathkit.com/embed/sales-tax-calculator

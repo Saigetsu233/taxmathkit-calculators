@@ -1,0 +1,11 @@
+stage,check,planning_action,2026_date_or_rule,official_source
+Income,Update year-to-date 1099 and business receipts,Reconcile invoices and payment platforms,Before every estimate,https://www.irs.gov/publications/p505
+Expenses,Reconcile ordinary and necessary business costs,Keep receipts and business purpose,Before every estimate,https://www.irs.gov/businesses/small-businesses-self-employed/deducting-business-expenses
+Profit,Forecast full-year net profit,Do not apply a reserve percentage to gross receipts alone,Before every estimate,https://www.irs.gov/taxtopics/tc554
+Tax layers,Estimate federal income tax and self-employment tax separately,Include expected W-2 wages and withholding,Before every estimate,https://www.irs.gov/publications/p505
+Safe harbor,Compare 90% current-year tax with 100% or applicable 110% prior-year tax,Use the smaller required annual-payment target when eligible,Before every estimate,https://www.irs.gov/publications/p505
+Payment 1,Confirm required amount and payment channel,Record confirmation and tax year,2026-04-15,https://www.irs.gov/publications/p505
+Payment 2,Refresh forecast rather than blindly repeating an old amount,Record confirmation and tax year,2026-06-15,https://www.irs.gov/publications/p505
+Payment 3,Refresh forecast and withholding,Record confirmation and tax year,2026-09-15,https://www.irs.gov/publications/p505
+Payment 4,Check January-payment exception and current instructions,Record confirmation and tax year,2027-01-15,https://www.irs.gov/publications/p505
+Year end,Save calculations and payment confirmations,Reconcile to tax documents,After final payment,https://www.irs.gov/publications/p505

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ToolCalculator } from "../../components/ToolCalculator";
+import { EmbedPanel } from "../../components/EmbedPanel";
+import { FormulaFlow } from "../../components/FormulaFlow";
 import { getGuidesForTool } from "../../lib/guides";
 import { getTool, tools } from "../../lib/tools";
 
@@ -32,12 +34,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const tool = getTool(slug);
   if (!tool) return {};
+  const socialImages: Record<string, string> = {
+    "income-tax-calculator": "/og-income-tax.png",
+    "1099-tax-calculator": "/og-1099-self-employment.png",
+    "self-employment-tax-calculator": "/og-1099-self-employment.png",
+    "sales-tax-calculator": "/og-sales-tax.png",
+  };
   return {
     title: tool.title,
     description: tool.metaDescription,
     keywords: [tool.primaryKeyword, ...tool.keywords],
     alternates: { canonical: `/tools/${tool.slug}` },
-    openGraph: { title: tool.title, description: tool.metaDescription, url: `/tools/${tool.slug}` },
+    openGraph: { title: tool.title, description: tool.metaDescription, url: `/tools/${tool.slug}`, images: socialImages[tool.slug] ? [socialImages[tool.slug]] : undefined },
+    twitter: socialImages[tool.slug] ? { card: "summary_large_image", images: [socialImages[tool.slug]] } : undefined,
   };
 }
 
@@ -47,6 +56,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   if (!tool) notFound();
   const related = tool.related.map((relatedSlug) => getTool(relatedSlug)).filter(Boolean);
   const guides = getGuidesForTool(tool.slug);
+  const embeddable = ["income-tax-calculator", "1099-tax-calculator", "self-employment-tax-calculator", "sales-tax-calculator"].includes(tool.slug);
   const freightRecommendation = freightRecommendations[tool.slug];
   const jsonLd = [{
     "@context": "https://schema.org", "@type": "WebApplication", name: tool.title,
@@ -66,6 +76,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         <aside><strong>Before you calculate</strong><p>This is an educational planning estimate. Review the assumptions below and verify the result for filing or payment decisions.</p><Link href="#sources">View primary sources ↓</Link></aside>
       </section>
       <section className="shell calculator-section"><ToolCalculator slug={tool.slug} /></section>
+      <FormulaFlow slug={tool.slug} />
       {freightRecommendation ? <section className="shell network-inline"><div><span>Related shipping calculation · ShipMathLab</span><h2>{freightRecommendation.title}</h2><p>{freightRecommendation.description}</p></div><a href={freightRecommendation.href}>{freightRecommendation.label} <span aria-hidden="true">→</span></a></section> : null}
       <section className="shell article-grid">
         <article className="article-main">
@@ -80,6 +91,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         </article>
         <aside className="source-panel" id="sources"><span className="eyebrow">Source trail</span><h2>Check the inputs</h2><p>We prefer primary government and tax-authority material. Open the sources and confirm they fit your situation.</p>{tool.sources.map((source) => <a href={source.url} key={source.url} target="_blank" rel="noreferrer"><span>{source.label}</span><span aria-hidden="true">↗</span></a>)}<Link href="/methodology">How we maintain calculators <span aria-hidden="true">→</span></Link></aside>
       </section>
+      {embeddable ? <EmbedPanel slug={tool.slug} title={tool.title} /> : null}
       {guides.length ? <section className="section section-tint guide-cluster"><div className="shell"><div className="section-heading compact"><div><span className="eyebrow">Topic cluster</span><h2>Examples and explanations for this calculator</h2></div><p>Each guide answers a different question and links back to the same transparent calculation.</p></div><div className="guide-card-grid">{guides.map((guide) => <Link className="guide-card" href={`/guides/${guide.slug}`} key={guide.slug}><div><span>{guide.intent}</span><span>{guide.readTime}</span></div><h3>{guide.title}</h3><p>{guide.description}</p><strong>Read the guide →</strong></Link>)}</div></div></section> : null}
       <section className="section section-tint"><div className="shell"><div className="section-heading compact"><div><span className="eyebrow">Related calculators</span><h2>Keep working through the numbers</h2></div></div><div className="tool-grid">{related.map((item) => item ? <Link className="tool-card" href={`/tools/${item.slug}`} key={item.slug}><div className="card-topline"><span>{item.category}</span><span className="badge">{item.taxYear}</span></div><h3>{item.title}</h3><p>{item.description}</p><div className="card-footer"><span>{item.badge}</span><strong>Calculate →</strong></div></Link> : null)}</div></div></section>
     </>

@@ -11,6 +11,7 @@ export function SiteHeader() {
         <nav className="main-nav" aria-label="Primary navigation">
           <Link href="/#calculators">Calculators</Link>
           <Link href="/guides">Guides</Link>
+          <Link href="/resources">Resources</Link>
           <Link href="/methodology">Methodology</Link>
         </nav>
         <Link href="/tools/income-tax-calculator" className="header-cta">Start calculating <span aria-hidden="true">→</span></Link>
@@ -28,11 +29,10 @@ export function SiteFooter() {
           <p>Transparent tax calculators built from published formulas and primary sources.</p>
         </div>
         <div><strong>Tools</strong><Link href="/tools/income-tax-calculator">Federal income tax</Link><Link href="/tools/1099-tax-calculator">1099 tax</Link><Link href="/tools/reverse-sales-tax-calculator">Reverse tax</Link></div>
-        <div><strong>Learn</strong><Link href="/guides">Guides</Link><Link href="/methodology">Methodology</Link><Link href="/disclaimer">Disclaimer</Link></div>
-        <div><strong>Legal</strong><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><a href="mailto:hello@taxmathkit.com">Contact</a></div>
+        <div><strong>Learn</strong><Link href="/guides">Guides</Link><Link href="/resources">Reference assets</Link><Link href="/methodology">Methodology</Link><Link href="/changelog">Version log</Link></div>
+        <div><strong>Open project</strong><a href="https://github.com/Saigetsu233/taxmathkit-calculators" target="_blank" rel="noopener noreferrer">GitHub formulas ↗</a><Link href="/disclaimer">Disclaimer</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
       </div>
-      <div className="shell footer-bottom"><span>© 2026 TaxMathKit</span><span>Estimates for education and planning—not tax advice.</span></div>
+      <div className="shell footer-bottom"><span>© 2026 TaxMathKit · maintained by Saigetsu233</span><span>Estimates for education and planning—not tax advice.</span></div>
     </footer>
   );
 }
-

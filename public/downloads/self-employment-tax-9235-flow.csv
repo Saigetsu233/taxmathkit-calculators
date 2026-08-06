@@ -1,0 +1,8 @@
+step,input_or_formula,output,official_reference,reviewed
+1,Net self-employment profit after business expenses,Net profit,https://www.irs.gov/taxtopics/tc554,2026-08-06
+2,Net profit × 92.35%,Net earnings subject to regular SE-tax calculation,https://www.irs.gov/taxtopics/tc554,2026-08-06
+3,"min(SE earnings, remaining Social Security wage-base room) × 12.4%",Social Security component,https://www.ssa.gov/oact/cola/cbb.html,2026-08-06
+4,SE earnings × 2.9%,Medicare component,https://www.irs.gov/taxtopics/tc554,2026-08-06
+5,Apply Additional Medicare Tax only when applicable,Additional Medicare component,https://www.irs.gov/taxtopics/tc560,2026-08-06
+6,Add the applicable components,Estimated self-employment tax,https://www.irs.gov/instructions/i1040sse,2026-08-06
+7,One-half of regular Social Security and Medicare components,Employer-equivalent income adjustment,https://www.irs.gov/instructions/i1040sse,2026-08-06

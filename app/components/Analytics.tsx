@@ -27,6 +27,17 @@ function send(payload: Record<string, unknown>) {
   });
 }
 
+export function trackAnalyticsEvent(eventType: "tool_open" | "calculation_completed" | "copy_result" | "guide_to_tool" | "embed_view", eventLabel = "", sourceHost = "") {
+  if (typeof window === "undefined" || navigator.doNotTrack === "1") return;
+  send({
+    path: window.location.pathname,
+    isInternal: isInternalBrowser(),
+    eventType,
+    eventLabel,
+    sourceHost,
+  });
+}
+
 export function Analytics() {
   const pathname = usePathname();
 
@@ -46,15 +57,40 @@ export function Analytics() {
       utmMedium: search.get("utm_medium") ?? "",
     });
 
-    if (!pathname.startsWith("/tools/")) return;
-    let sentInteraction = false;
-    const recordInteraction = (event: Event) => {
-      if (sentInteraction || !(event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement)) return;
-      sentInteraction = true;
-      send({ ...common, eventType: "calculator_interaction" });
-    };
-    document.addEventListener("change", recordInteraction, { passive: true });
-    return () => document.removeEventListener("change", recordInteraction);
+    if (pathname.startsWith("/embed/")) {
+      trackAnalyticsEvent("embed_view", pathname.replace("/embed/", ""), document.referrer);
+      return;
+    }
+
+    if (pathname.startsWith("/tools/")) {
+      trackAnalyticsEvent("tool_open", pathname.replace("/tools/", ""));
+      let sentCompletion = false;
+      let timer = 0;
+      const recordCompletion = (event: Event) => {
+        if (sentCompletion || !(event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement)) return;
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          sentCompletion = true;
+          trackAnalyticsEvent("calculation_completed", pathname.replace("/tools/", ""));
+        }, 700);
+      };
+      document.addEventListener("input", recordCompletion, { passive: true });
+      document.addEventListener("change", recordCompletion, { passive: true });
+      return () => {
+        window.clearTimeout(timer);
+        document.removeEventListener("input", recordCompletion);
+        document.removeEventListener("change", recordCompletion);
+      };
+    }
+
+    if (pathname.startsWith("/guides/")) {
+      const recordGuideExit = (event: MouseEvent) => {
+        const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href^="/tools/"]') : null;
+        if (anchor) trackAnalyticsEvent("guide_to_tool", anchor.getAttribute("href") ?? "");
+      };
+      document.addEventListener("click", recordGuideExit);
+      return () => document.removeEventListener("click", recordGuideExit);
+    }
   }, [pathname]);
 
   return null;

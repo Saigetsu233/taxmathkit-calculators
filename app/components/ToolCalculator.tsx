@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import { trackAnalyticsEvent } from "./Analytics";
 import {
   californiaIncomeTax2025,
   employeeFica,
@@ -103,6 +104,83 @@ function CalculatorFrame({ children, results, note }: { children: ReactNode; res
         <div className="metrics-grid">{results}</div>
         {note ? <p className="result-note">{note}</p> : null}
       </div>
+    </div>
+  );
+}
+
+type SavedField = { id: string; value: string; checked?: boolean };
+
+function applySavedValue(element: HTMLInputElement | HTMLSelectElement, field: SavedField) {
+  if (element instanceof HTMLInputElement && element.type === "checkbox") {
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "checked")?.set;
+    setter?.call(element, field.checked === true);
+    element.dispatchEvent(new Event("change", { bubbles: true }));
+    return;
+  }
+  const prototype = element instanceof HTMLSelectElement ? HTMLSelectElement.prototype : HTMLInputElement.prototype;
+  const setter = Object.getOwnPropertyDescriptor(prototype, "value")?.set;
+  setter?.call(element, field.value);
+  element.dispatchEvent(new Event(element instanceof HTMLSelectElement ? "change" : "input", { bubbles: true }));
+}
+
+function CalculatorUtilities({ slug }: { slug: string }) {
+  const [status, setStatus] = useState("");
+  const storageKey = `taxmathkit-inputs:${slug}`;
+
+  function root() {
+    return document.querySelector<HTMLElement>(`[data-calculator-root="${slug}"]`);
+  }
+
+  async function copyResult() {
+    const metrics = Array.from(root()?.querySelectorAll<HTMLElement>(".metric") ?? []);
+    const summary = metrics.map((metric) => {
+      const label = metric.querySelector("span")?.textContent?.trim() ?? "Result";
+      const value = metric.querySelector("strong")?.textContent?.trim() ?? "";
+      return `${label}: ${value}`;
+    }).join("\n");
+    try {
+      await navigator.clipboard.writeText(summary);
+      trackAnalyticsEvent("copy_result", slug);
+      setStatus("Result copied");
+    } catch {
+      setStatus("Copy was blocked by the browser");
+    }
+  }
+
+  function saveInputs() {
+    try {
+      const fields = Array.from(root()?.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input[id], select[id]") ?? []).map((element) => ({
+        id: element.id,
+        value: element.value,
+        ...(element instanceof HTMLInputElement && element.type === "checkbox" ? { checked: element.checked } : {}),
+      }));
+      window.localStorage.setItem(storageKey, JSON.stringify(fields));
+      setStatus("Inputs saved on this device");
+    } catch {
+      setStatus("Local storage is unavailable");
+    }
+  }
+
+  function restoreInputs() {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(storageKey) ?? "[]") as SavedField[];
+      for (const field of saved) {
+        const element = root()?.querySelector<HTMLInputElement | HTMLSelectElement>(`#${CSS.escape(field.id)}`);
+        if (element) applySavedValue(element, field);
+      }
+      setStatus(saved.length ? "Saved inputs restored" : "No saved inputs found");
+    } catch {
+      setStatus("Saved inputs could not be restored");
+    }
+  }
+
+  return (
+    <div className="calculator-utilities" aria-label="Calculator result actions">
+      <button type="button" onClick={copyResult}>Copy result</button>
+      <button type="button" onClick={() => window.print()}>Print result</button>
+      <button type="button" onClick={saveInputs}>Save inputs locally</button>
+      <button type="button" onClick={restoreInputs}>Restore saved inputs</button>
+      <span aria-live="polite">{status || "Inputs stay in this browser and are never uploaded."}</span>
     </div>
   );
 }
@@ -405,20 +483,22 @@ function VatCalculator() {
   );
 }
 
-export function ToolCalculator({ slug }: { slug: string }) {
+export function ToolCalculator({ slug, embedded = false }: { slug: string; embedded?: boolean }) {
+  let calculator: ReactNode = null;
   switch (slug) {
-    case "income-tax-calculator": return <IncomeTaxCalculator />;
-    case "paycheck-tax-calculator": return <PaycheckCalculator />;
-    case "sales-tax-calculator": return <SalesTaxCalculator />;
-    case "reverse-sales-tax-calculator": return <SalesTaxCalculator reverse />;
-    case "capital-gains-tax-calculator": return <CapitalGainsCalculator />;
-    case "lottery-tax-calculator": return <LotteryCalculator />;
-    case "california-tax-calculator": return <CaliforniaCalculator />;
-    case "self-employment-tax-calculator": return <SelfEmploymentCalculator />;
-    case "1099-tax-calculator": return <SelfEmploymentCalculator combined />;
-    case "quarterly-tax-calculator": return <QuarterlyCalculator />;
-    case "car-sales-tax-calculator": return <CarSalesTaxCalculator />;
-    case "vat-calculator": return <VatCalculator />;
-    default: return null;
+    case "income-tax-calculator": calculator = <IncomeTaxCalculator />; break;
+    case "paycheck-tax-calculator": calculator = <PaycheckCalculator />; break;
+    case "sales-tax-calculator": calculator = <SalesTaxCalculator />; break;
+    case "reverse-sales-tax-calculator": calculator = <SalesTaxCalculator reverse />; break;
+    case "capital-gains-tax-calculator": calculator = <CapitalGainsCalculator />; break;
+    case "lottery-tax-calculator": calculator = <LotteryCalculator />; break;
+    case "california-tax-calculator": calculator = <CaliforniaCalculator />; break;
+    case "self-employment-tax-calculator": calculator = <SelfEmploymentCalculator />; break;
+    case "1099-tax-calculator": calculator = <SelfEmploymentCalculator combined />; break;
+    case "quarterly-tax-calculator": calculator = <QuarterlyCalculator />; break;
+    case "car-sales-tax-calculator": calculator = <CarSalesTaxCalculator />; break;
+    case "vat-calculator": calculator = <VatCalculator />; break;
   }
+  if (!calculator) return null;
+  return <div data-calculator-root={slug}>{calculator}{embedded ? null : <CalculatorUtilities slug={slug} />}</div>;
 }

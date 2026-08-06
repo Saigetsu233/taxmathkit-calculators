@@ -94,15 +94,19 @@ async function recordAnalytics(request: Request, env: Env) {
   try {
     if (!env.DB || !env.ANALYTICS_SALT || Number(request.headers.get("content-length") ?? 0) > 2048) return new Response(null, { status: 204 });
     if (detectCrawler(request.headers.get("user-agent") ?? "")) return new Response(null, { status: 204 });
-    const payload = await request.json() as { path?: unknown; eventType?: unknown; referrer?: unknown; isInternal?: unknown; utmSource?: unknown };
+    const payload = await request.json() as { path?: unknown; eventType?: unknown; eventLabel?: unknown; sourceHost?: unknown; referrer?: unknown; isInternal?: unknown; utmSource?: unknown };
     const path = normalizedPath(payload.path);
     if (!path) return new Response(null, { status: 204 });
     const date = new Date().toISOString().slice(0, 10);
     const hash = await visitorHash(date, request, env.ANALYTICS_SALT);
     const internal = payload.isInternal === true ? 1 : 0;
-    if (payload.eventType === "calculator_interaction" && path.startsWith("/tools/")) {
-      await env.DB.prepare("INSERT INTO interaction_events (event_date, path, visitor_hash, is_internal) VALUES (?, ?, ?, ?)")
-        .bind(date, path, hash, internal).run();
+    const allowedEvents = new Set(["tool_open", "calculation_completed", "copy_result", "guide_to_tool", "embed_view"]);
+    const eventType = typeof payload.eventType === "string" && allowedEvents.has(payload.eventType) ? payload.eventType : "";
+    if (eventType) {
+      const eventLabel = typeof payload.eventLabel === "string" ? payload.eventLabel.trim().slice(0, 160) : "";
+      const sourceHost = normalizedHost(payload.sourceHost);
+      await env.DB.prepare("INSERT INTO interaction_events (event_date, path, event_type, event_label, source_host, visitor_hash, is_internal) VALUES (?, ?, ?, ?, ?, ?, ?)")
+        .bind(date, path, eventType, eventLabel, sourceHost, hash, internal).run();
       return new Response(null, { status: 204 });
     }
     const referrerHost = normalizedHost(payload.referrer);
@@ -124,8 +128,11 @@ async function analyticsReport(request: Request, env: Env) {
     env.DB.prepare("SELECT path, COUNT(*) views FROM page_views WHERE event_date >= ? AND is_internal = 0 GROUP BY path ORDER BY views DESC LIMIT 20").bind(startDate),
     env.DB.prepare("SELECT referrer_host host, COUNT(*) views FROM page_views WHERE event_date >= ? AND is_internal = 0 AND referrer_host <> '' GROUP BY referrer_host ORDER BY views DESC LIMIT 20").bind(startDate),
     env.DB.prepare("SELECT source_channel source, COUNT(*) views, COUNT(DISTINCT visitor_hash) daily_unique_visitors FROM page_views WHERE event_date >= ? AND is_internal = 0 GROUP BY source_channel ORDER BY views DESC LIMIT 20").bind(startDate),
-    env.DB.prepare("SELECT COUNT(*) interactions, COUNT(DISTINCT visitor_hash) daily_unique_users FROM interaction_events WHERE event_date >= ? AND is_internal = 0").bind(startDate),
-    env.DB.prepare("SELECT path, COUNT(*) interactions, COUNT(DISTINCT visitor_hash) daily_unique_users FROM interaction_events WHERE event_date >= ? AND is_internal = 0 GROUP BY path ORDER BY interactions DESC LIMIT 20").bind(startDate),
+    env.DB.prepare("SELECT COUNT(*) interactions, COUNT(DISTINCT visitor_hash) daily_unique_users FROM interaction_events WHERE event_date >= ? AND is_internal = 0 AND event_type = 'calculation_completed'").bind(startDate),
+    env.DB.prepare("SELECT path, COUNT(*) interactions, COUNT(DISTINCT visitor_hash) daily_unique_users FROM interaction_events WHERE event_date >= ? AND is_internal = 0 AND event_type = 'calculation_completed' GROUP BY path ORDER BY interactions DESC LIMIT 20").bind(startDate),
+    env.DB.prepare("SELECT event_type event, COUNT(*) events, COUNT(DISTINCT visitor_hash) daily_unique_users FROM interaction_events WHERE event_date >= ? AND is_internal = 0 GROUP BY event_type ORDER BY events DESC").bind(startDate),
+    env.DB.prepare("SELECT event_type event, path, event_label label, COUNT(*) events FROM interaction_events WHERE event_date >= ? AND is_internal = 0 GROUP BY event_type, path, event_label ORDER BY events DESC LIMIT 50").bind(startDate),
+    env.DB.prepare("SELECT source_host host, COUNT(*) embeds FROM interaction_events WHERE event_date >= ? AND is_internal = 0 AND event_type = 'embed_view' AND source_host <> '' GROUP BY source_host ORDER BY embeds DESC LIMIT 20").bind(startDate),
     env.DB.prepare("SELECT COUNT(*) requests FROM crawler_hits WHERE event_date >= ?").bind(startDate),
     env.DB.prepare("SELECT event_date date, COUNT(*) requests FROM crawler_hits WHERE event_date >= ? GROUP BY event_date ORDER BY event_date").bind(startDate),
     env.DB.prepare("SELECT crawler, COUNT(*) requests FROM crawler_hits WHERE event_date >= ? GROUP BY crawler ORDER BY requests DESC LIMIT 20").bind(startDate),
@@ -142,10 +149,13 @@ async function analyticsReport(request: Request, env: Env) {
     sourceChannels: rows[6].results,
     calculatorInteractions: rows[7].results[0] ?? { interactions: 0, daily_unique_users: 0 },
     calculatorTopPages: rows[8].results,
-    crawlerTotals: rows[9].results[0] ?? { requests: 0 },
-    crawlerDaily: rows[10].results,
-    topCrawlers: rows[11].results,
-    crawlerTopPages: rows[12].results,
+    eventTotals: rows[9].results,
+    eventTopPages: rows[10].results,
+    embedSources: rows[11].results,
+    crawlerTotals: rows[12].results[0] ?? { requests: 0 },
+    crawlerDaily: rows[13].results,
+    topCrawlers: rows[14].results,
+    crawlerTopPages: rows[15].results,
   }, { headers: { "cache-control": "no-store" } });
 }
 
