@@ -19,6 +19,12 @@ export type TaxTool = {
   faqs: { question: string; answer: string }[];
   sources: SourceLink[];
   related: string[];
+  workedExample?: {
+    title: string;
+    steps: string[];
+    result: string;
+  };
+  commonMistakes?: string[];
 };
 
 const IRS_2026 = "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill";
@@ -51,6 +57,21 @@ export const tools: TaxTool[] = [
     ],
     sources: [{ label: "IRS — 2026 inflation adjustments", url: IRS_2026 }, { label: "IRS — federal rates and brackets", url: IRS_BRACKETS }],
     related: ["paycheck-tax-calculator", "capital-gains-tax-calculator", "california-tax-calculator"],
+    workedExample: {
+      title: "Single filer with $85,000 gross income in 2026",
+      steps: [
+        "$85,000 gross income − $3,000 eligible adjustments = $82,000 AGI.",
+        "$82,000 AGI − $16,100 standard deduction = $65,900 taxable income.",
+        "Apply 10% to the first $12,400, 12% through $50,400, and 22% to the remaining $15,500.",
+      ],
+      result: "$9,210 estimated federal income tax before credits and taxes outside this simplified model; the marginal rate is 22%, not 22% of every dollar earned.",
+    },
+    commonMistakes: [
+      "Entering gross pay where the calculator requests taxable income or AGI.",
+      "Applying the marginal bracket rate to all income.",
+      "Subtracting both the standard deduction and itemized deductions.",
+      "Confusing tax liability with refund or balance due after payments.",
+    ],
   },
   {
     slug: "paycheck-tax-calculator",
@@ -87,8 +108,23 @@ export const tools: TaxTool[] = [
       { question: "Can I use a ZIP code alone for an exact rate?", answer: "Not reliably. Tax boundaries can differ inside a ZIP code. For filing or collection, use an official address-level source." },
       { question: "How do I remove tax from a total?", answer: "Use the Reverse Sales Tax Calculator, which divides the tax-inclusive total by 1 plus the rate." },
     ],
-    sources: [{ label: "Streamlined Sales Tax — state resources", url: "https://www.streamlinedsalestax.org/for-businesses/state-taxability-and-exemption-information" }, { label: "Avalara — address-level rate explanation", url: "https://www.avalara.com/us/en/taxrates/calculator.html" }],
+    sources: [{ label: "California CDTFA — verify a combined rate by address", url: "https://www.cdtfa.ca.gov/taxes-and-fees/know-your-rate.htm" }, { label: "New York Tax Department — combined jurisdiction rates", url: "https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf" }],
     related: ["reverse-sales-tax-calculator", "car-sales-tax-calculator", "vat-calculator"],
+    workedExample: {
+      title: "$125 taxable price at an 8.25% combined rate",
+      steps: [
+        "Convert 8.25% to decimal form: 0.0825.",
+        "Sales tax: $125 × 0.0825 = $10.3125, then apply the jurisdiction's required rounding method.",
+        "With ordinary cent rounding for this illustration: $125 + $10.31 = $135.31.",
+      ],
+      result: "$10.31 illustrative sales tax and $135.31 total. Verify the address, product taxability, sourcing, date, and rounding rule before collection or filing.",
+    },
+    commonMistakes: [
+      "Using a statewide headline rate when local district rates also apply.",
+      "Treating a ZIP code as a precise tax boundary.",
+      "Applying the rate to exempt items or excluding taxable charges without authority.",
+      "Rounding inconsistently between line items, invoices, and filed returns.",
+    ],
   },
   {
     slug: "reverse-sales-tax-calculator",
@@ -184,6 +220,21 @@ export const tools: TaxTool[] = [
     ],
     sources: [{ label: "IRS Topic 554 — Self-employment tax", url: IRS_SE }, { label: "SSA — 2026 contribution base", url: "https://www.ssa.gov/oact/cola/cbbdet.html" }],
     related: ["1099-tax-calculator", "quarterly-tax-calculator", "income-tax-calculator"],
+    workedExample: {
+      title: "$60,000 net profit with no W-2 wages",
+      steps: [
+        "$60,000 × 92.35% = $55,410 net earnings subject to the regular SE-tax calculation.",
+        "Social Security component: $55,410 × 12.4% = $6,870.84.",
+        "Medicare component: $55,410 × 2.9% = $1,606.89.",
+      ],
+      result: "$8,477.73 estimated self-employment tax and about $4,238.87 as the employer-equivalent-half deduction, before Additional Medicare Tax or special methods.",
+    },
+    commonMistakes: [
+      "Applying 15.3% directly to gross 1099 receipts.",
+      "Ignoring W-2 wages that already use part of the Social Security wage base.",
+      "Subtracting half of SE tax from SE tax itself instead of treating it as an income adjustment.",
+      "Assuming self-employment tax includes federal and state income tax.",
+    ],
   },
   {
     slug: "1099-tax-calculator",
@@ -203,6 +254,21 @@ export const tools: TaxTool[] = [
     ],
     sources: [{ label: "IRS — Self-employment tax", url: IRS_SE }, { label: "IRS — 2026 brackets", url: IRS_2026 }, { label: "IRS Publication 505", url: IRS_ESTIMATED }],
     related: ["self-employment-tax-calculator", "quarterly-tax-calculator", "income-tax-calculator"],
+    workedExample: {
+      title: "$90,000 revenue and $20,000 business expenses",
+      steps: [
+        "$90,000 − $20,000 = $70,000 Schedule C planning profit.",
+        "Estimate SE tax from the regular 92.35% base, then deduct the employer-equivalent half when estimating AGI.",
+        "Apply the chosen filing status, standard deduction, federal brackets, entered withholding, and any deliberately selected simplified QBI assumption.",
+      ],
+      result: "The calculator separates profit, SE tax, federal income tax, withholding, and the remaining quarterly reserve so a single percentage does not hide the moving parts.",
+    },
+    commonMistakes: [
+      "Building the reserve from gross receipts instead of defensible net profit.",
+      "Counting a business expense twice—once against profit and again as a personal deduction.",
+      "Using the current-year estimate without checking prior-year safe-harbor rules.",
+      "Treating a planning reserve as the exact amount due on each statutory deadline.",
+    ],
   },
   {
     slug: "quarterly-tax-calculator",
@@ -270,4 +336,3 @@ export const categories = ["Income", "Freelance", "Sales", "Investment", "Specia
 export function getTool(slug: string) {
   return toolMap.get(slug);
 }
-

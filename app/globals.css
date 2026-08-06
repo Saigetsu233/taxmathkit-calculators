@@ -190,6 +190,42 @@ main { min-height: 70vh; }
 .guide-index { color: var(--teal); font-family: var(--font-serif), Georgia, serif; font-size: 32px; }
 .guide-list h2 { margin: 0; color: var(--navy); font-family: var(--font-serif), Georgia, serif; font-size: 35px; line-height: 1.1; }
 .guide-list p { max-width: 780px; color: var(--muted); }
+.guide-category-nav { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 32px; }
+.guide-category-nav a { padding: 10px 14px; color: var(--navy); border: 1px solid var(--line); border-radius: 999px; background: white; font-size: 11px; font-weight: 800; }
+.guide-category-nav a:hover { color: white; border-color: var(--teal); background: var(--teal); }
+.guide-category { scroll-margin-top: 90px; padding-top: 72px; }
+.guide-category .section-heading { margin-bottom: 26px; }
+.guide-category .section-heading h2 { font-size: clamp(34px,4vw,48px); }
+.guide-card-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.guide-card { display: flex; min-height: 285px; flex-direction: column; padding: 26px; color: var(--navy); border: 1px solid var(--line); border-radius: 12px; background: white; box-shadow: 0 9px 26px rgba(16,42,67,.05); }
+.guide-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+.guide-card > div { display: flex; justify-content: space-between; gap: 15px; color: var(--teal); font-size: 10px; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+.guide-card h3 { margin: 40px 0 12px; font-family: var(--font-serif),Georgia,serif; font-size: 29px; line-height: 1.08; letter-spacing: -.025em; }
+.guide-card p { margin: 0 0 24px; color: var(--muted); font-size: 12px; line-height: 1.65; }
+.guide-card strong { margin-top: auto; color: var(--teal); font-size: 11px; }
+.guide-article { padding-bottom: 25px; }
+.guide-hero { max-width: 970px; padding-top: 55px; }
+.guide-hero h1 { margin: 18px 0; font-size: clamp(44px,6.5vw,76px); line-height: .98; letter-spacing: -.045em; }
+.guide-hero > p { max-width: 800px; color: var(--muted); font-size: 18px; line-height: 1.65; }
+.guide-takeaway { display: grid; grid-template-columns: 120px 1fr; gap: 22px; margin-top: 32px; padding: 22px; border-left: 4px solid var(--teal); background: var(--teal-pale); }
+.guide-takeaway strong { color: var(--teal); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+.guide-takeaway p { margin: 0; color: var(--navy); font-family: var(--font-serif),Georgia,serif; font-size: 20px; line-height: 1.35; }
+.guide-layout { padding-top: 62px; }
+.guide-body section + section { margin-top: 52px; }
+.guide-body h2 { margin: 0 0 18px; }
+.guide-body p { color: #526575; line-height: 1.75; }
+.guide-body ul { display: grid; gap: 9px; padding-left: 22px; color: #526575; line-height: 1.6; }
+.guide-checklist { padding: 26px; border: 1px solid var(--line); border-radius: 11px; background: var(--cream); }
+.guide-checklist ul { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 0; list-style: none; }
+.guide-checklist li { padding: 9px 10px 9px 32px; position: relative; border: 1px solid var(--line); border-radius: 8px; background: white; font-size: 12px; }
+.guide-checklist li::before { content: "✓"; position: absolute; left: 11px; color: var(--teal); font-weight: 900; }
+.guide-tools { padding-top: 75px; }
+.guide-cluster { border-top: 1px solid var(--line); }
+.tool-example, .tool-mistakes { margin-top: 46px; padding: 24px; border: 1px solid var(--line); border-radius: 10px; background: var(--cream); }
+.tool-example h2, .tool-mistakes h2 { margin-top: 9px; }
+.tool-example ol, .tool-mistakes ul { display: grid; gap: 10px; padding-left: 22px; color: var(--muted); line-height: 1.6; }
+.tool-example > p { margin-bottom: 0; padding: 16px; color: var(--navy); border-left: 3px solid var(--teal); background: white; line-height: 1.55; }
+.tool-mistakes { background: var(--amber-pale); }
 .principle-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 55px; }
 .principle-grid article { padding: 26px; border: 1px solid var(--line); border-radius: 11px; background: var(--cream); }
 .principle-grid article > span { color: var(--teal); font-family: var(--font-serif), Georgia, serif; font-size: 22px; }
@@ -230,6 +266,7 @@ main { min-height: 70vh; }
   .hero { padding: 68px 0; }.hero-grid, .tool-hero, .calculator-frame, .article-grid, .method-preview { grid-template-columns: 1fr; }
   .hero-grid { gap: 45px; }.tool-hero { gap: 25px; }.tool-hero aside { max-width: 560px; }
   .featured-grid, .tool-grid { grid-template-columns: repeat(2, 1fr); }
+  .guide-card-grid { grid-template-columns: 1fr; }
   .article-grid { gap: 45px; }.source-panel { position: static; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -241,13 +278,14 @@ main { min-height: 70vh; }
   .formula-total { display: grid; }.formula-total strong { margin: 0; }.formula-total small { grid-column: 1 / -1; }
   .proof-grid { grid-template-columns: repeat(2, 1fr); padding: 16px 0; }.proof-grid > div:nth-child(2) { border-right: 0; }
   .section { padding-top: 62px; padding-bottom: 62px; }.section-heading { display: block; }.section-heading > p { margin-top: 13px; }
-  .featured-grid, .tool-grid, .field-grid, .metrics-grid, .check-list, .principle-grid { grid-template-columns: 1fr; }
+  .featured-grid, .tool-grid, .field-grid, .metrics-grid, .check-list, .principle-grid, .guide-checklist ul { grid-template-columns: 1fr; }
   .tool-card, .featured-card { min-height: 250px; }.method-preview { gap: 45px; }
   .cta-band .shell, .footer-bottom, .network-band-inner, .network-inline { align-items: flex-start; flex-direction: column; }
   .tool-hero { padding-top: 42px; }.tool-hero h1 { font-size: 42px; }
   .calculator-section { width: 100%; }.calculator-frame { border-radius: 0; border-inline: 0; }.calculator-inputs, .calculator-results { padding: 24px 18px; }
   .metric-emphasis { grid-column: auto; }.article-grid { padding-top: 52px; }.article-main h2 { font-size: 30px; }
   .guide-list article { grid-template-columns: 1fr; gap: 2px; }.guide-index { font-size: 20px; }
+  .guide-takeaway { grid-template-columns: 1fr; gap: 8px; }.guide-hero { padding-top: 38px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 35px; }.footer-grid > div:first-child { grid-column: 1 / -1; }
 }
 

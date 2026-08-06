@@ -1,11 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { guideCategories, guides } from "../lib/guides";
 
-export const metadata: Metadata = { title: "Tax Guides", description: "Plain-English guides to federal brackets, 1099 taxes, reverse sales tax and estimated payments.", alternates: { canonical: "/guides" } };
-const guides = [
-  { id: "brackets", label: "Federal income", title: "How progressive tax brackets actually work", body: "A marginal rate is not applied to every dollar you earn. Income fills a series of bands; only the dollars inside each band use that band’s rate. Start with adjusted gross income, subtract the applicable deduction, and apply the schedule to taxable income—not gross pay.", tool: "income-tax-calculator", cta: "Try the federal calculator" },
-  { id: "1099", label: "Freelance", title: "From 1099 revenue to a realistic tax reserve", body: "Gross receipts are not the same as business profit. Subtract eligible business expenses, calculate self-employment tax on the regular 92.35% base, then estimate income tax after deductions. Withholding from a separate W-2 job can reduce the amount still due.", tool: "1099-tax-calculator", cta: "Estimate 1099 tax" },
-  { id: "reverse-tax", label: "Sales tax", title: "How to extract tax from a tax-inclusive price", body: "Do not multiply the total by the tax rate. Divide the tax-inclusive total by one plus the rate to recover the pre-tax price, then subtract. For example, at 8%, a $108 total contains $8 of tax—not $8.64.", tool: "reverse-sales-tax-calculator", cta: "Reverse a tax-inclusive price" },
-  { id: "estimated", label: "Quarterly payments", title: "The two common federal safe-harbor paths", body: "The general required annual payment is based on the smaller of 90% of current-year tax or 100% of prior-year tax, with 110% of prior-year tax used for certain higher-income taxpayers. Withholding timing and uneven income can change the practical calculation.", tool: "quarterly-tax-calculator", cta: "Plan quarterly payments" },
-];
-export default function GuidesPage() { return <div className="shell content-page"><span className="eyebrow">Plain-English references</span><h1>Tax guides for the number you are trying to find</h1><p className="lead">Short explanations that connect each calculator to the tax concept underneath it. These are educational summaries, not individualized advice.</p><div className="guide-list">{guides.map((guide, index) => <article id={guide.id} key={guide.id}><div className="guide-index">0{index + 1}</div><div><span className="eyebrow">{guide.label}</span><h2>{guide.title}</h2><p>{guide.body}</p><Link className="text-link" href={`/tools/${guide.tool}`}>{guide.cta} →</Link></div></article>)}</div></div>; }
+export const metadata: Metadata = {
+  title: "Tax Guides — Worked Examples, Formulas & Common Mistakes",
+  description: "Practical tax guides for federal income tax, 1099 and self-employment tax, and sales tax. Each guide uses a distinct example, formula, comparison, or error check.",
+  alternates: { canonical: "/guides" },
+  openGraph: { title: "TaxMathKit tax guides", description: "Worked examples, formula explanations, common mistakes, and comparison guides linked to transparent calculators.", url: "/guides" },
+};
+
+export default function GuidesPage() {
+  return (
+    <div className="shell content-page guide-index-page">
+      <span className="eyebrow">Plain-English references</span>
+      <h1>Tax guides built around the question you are actually asking</h1>
+      <p className="lead">Twelve focused guides—one real problem per page. Use a worked example, inspect the formula, catch a common error, or compare two methods before opening the linked calculator.</p>
+      <nav className="guide-category-nav" aria-label="Guide topics">{guideCategories.map((category) => <a key={category} href={`#${category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>{category}</a>)}</nav>
+      {guideCategories.map((category) => {
+        const categoryGuides = guides.filter((guide) => guide.category === category);
+        const id = category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        return <section className="guide-category" id={id} key={category}><div className="section-heading compact"><div><span className="eyebrow">4 independent answers</span><h2>{category}</h2></div><p>Worked example · formula · mistakes · comparison</p></div><div className="guide-card-grid">{categoryGuides.map((guide) => <Link href={`/guides/${guide.slug}`} className="guide-card" key={guide.slug}><div><span>{guide.intent}</span><span>{guide.readTime}</span></div><h3>{guide.title}</h3><p>{guide.description}</p><strong>Read the guide →</strong></Link>)}</div></section>;
+      })}
+    </div>
+  );
+}
