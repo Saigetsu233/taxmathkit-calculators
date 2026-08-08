@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ToolCalculator } from "../../components/ToolCalculator";
 import { EmbedPanel } from "../../components/EmbedPanel";
 import { FormulaFlow } from "../../components/FormulaFlow";
+import { ToolTrustPanel } from "../../components/ToolTrustPanel";
 import { getGuidesForTool } from "../../lib/guides";
 import { getTool, tools } from "../../lib/tools";
 import { priorityToolContent } from "../../lib/priority-content";
@@ -78,8 +79,9 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         <div><span className="eyebrow">{tool.eyebrow}</span><h1>{tool.title}</h1><p>{tool.description}</p><div className="tool-meta"><span>{tool.badge}</span><span>Rates: {tool.taxYear}</span><span>Updated {tool.updated}</span></div></div>
         <aside><strong>Before you calculate</strong><p>This is an educational planning estimate. Review the assumptions below and verify the result for filing or payment decisions.</p><Link href="#sources">View primary sources ↓</Link></aside>
       </section>
+      <ToolTrustPanel tool={tool} priority={priority} />
       <section id="calculator" className="shell calculator-section">
-        {priority ? <div className="calculator-start"><div><span className="eyebrow">Prefilled worked example</span><strong>{tool.workedExample?.title ?? "Change any input to see the estimate update"}</strong><p>{priority.searchLead}</p><code className="calculator-formula">{tool.formula}</code></div><a className="button primary" href="#calculator">Run the example ↓</a></div> : null}
+        <div className="calculator-start"><div><span className="eyebrow">Prefilled worked example</span><strong>{tool.workedExample?.title ?? "Change any input to see the estimate update"}</strong><p>{priority?.searchLead ?? tool.description}</p><code className="calculator-formula">{tool.formula}</code></div><a className="button primary" href="#calculator">Run the example ↓</a></div>
         <ToolCalculator slug={tool.slug} nextSteps={nextSteps} />
       </section>
       <FormulaFlow slug={tool.slug} />
